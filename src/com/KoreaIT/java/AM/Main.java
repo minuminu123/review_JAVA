@@ -9,6 +9,8 @@ public class Main {
 
 		Scanner sc = new Scanner(System.in);
 
+		
+		
 		int lastArticleId = 0;
 		ArrayList<Article> articles = new ArrayList<>();
 		while (true) {
