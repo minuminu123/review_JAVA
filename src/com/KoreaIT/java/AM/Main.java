@@ -1,12 +1,8 @@
 package com.KoreaIT.java.AM;
 
-<<<<<<< HEAD
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-=======
-import java.util.ArrayList;
->>>>>>> 8532f8003e22e92d644cbe757300b66b7101d9fb
 import java.util.Scanner;
 
 public class Main {
@@ -14,7 +10,6 @@ public class Main {
 		System.out.println("==프로그램 시작==");
 
 		Scanner sc = new Scanner(System.in);
-<<<<<<< HEAD
 		Date today = new Date();
 		SimpleDateFormat format;
 		format = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
@@ -26,16 +21,6 @@ public class Main {
 		while (true) {
 			System.out.print("명령어 > ");
 			String command = sc.nextLine().trim();
-=======
-
-		
-		
-		int lastArticleId = 0;
-		ArrayList<Article> articles = new ArrayList<>();
-		while (true) {
-			System.out.print("명령어 > ");
-			String command = sc.nextLine();
->>>>>>> 8532f8003e22e92d644cbe757300b66b7101d9fb
 
 			if (command.length() == 0) {
 				System.out.println("명령어를 입력해주세요");
@@ -47,22 +32,13 @@ public class Main {
 			}
 
 			if (command.equals("article list")) {
-<<<<<<< HEAD
 				if (articles.size() == 0) {
-=======
-				if(lastArticleId==0) {
->>>>>>> 8532f8003e22e92d644cbe757300b66b7101d9fb
 					System.out.println("게시글이 없습니다");
 					continue;
 				}
 				System.out.println("번호   /   제목");
-<<<<<<< HEAD
 				for (int i = articles.size(); i > 0; i--) {
 					Article article = articles.get(i - 1);
-=======
-				for(int i = articles.size(); i > 0; i--) {
-					Article article = articles.get(i-1);
->>>>>>> 8532f8003e22e92d644cbe757300b66b7101d9fb
 					System.out.printf("%d	/	%s\n", article.id, article.title);
 				}
 			} else if (command.equals("article write")) {
@@ -71,17 +47,13 @@ public class Main {
 				String title = sc.nextLine();
 				System.out.print("내용 : ");
 				String body = sc.nextLine();
-<<<<<<< HEAD
 				Date date = new Date();
-=======
->>>>>>> 8532f8003e22e92d644cbe757300b66b7101d9fb
 
 //				System.out.println(title + " / " + body);
 
 				System.out.printf("%d번글이 생성되었습니다\n", id);
 				lastArticleId++;
 
-<<<<<<< HEAD
 				articles.add(new Article(id, title, body, date, hit));
 
 			} else if (command.startsWith("article detail")) {
@@ -101,6 +73,8 @@ public class Main {
 					System.out.println("명령어를 다시 입력해주세요.");
 				} catch (IndexOutOfBoundsException e) {
 					System.out.println(a + "번 게시물은 존재하지 않습니다.");
+				} catch (NumberFormatException e) {
+					System.out.println("detail의 뒤에는 숫자만 올수 있습니다.");
 				}
 
 			} else if (command.startsWith("article delete")) {
@@ -115,25 +89,18 @@ public class Main {
 					System.out.println("명령어를 다시 입력해주세요.");
 				} catch (IndexOutOfBoundsException e) {
 					System.out.println(a + "번 게시물은 존재하지 않습니다.");
+				} catch (NumberFormatException e) {
+					System.out.println("detail의 뒤에는 숫자만 올수 있습니다.");
 				}
 			}
 
 			else {
-=======
-				articles.add(new Article(id,title,body));
-				
-			} else {
->>>>>>> 8532f8003e22e92d644cbe757300b66b7101d9fb
 				System.out.println("존재하지 않는 명령어입니다");
 			}
 		}
 
 		System.out.println("==프로그램 끝==");
 
-<<<<<<< HEAD
-=======
-		
->>>>>>> 8532f8003e22e92d644cbe757300b66b7101d9fb
 		sc.close();
 	}
 }
@@ -142,7 +109,6 @@ class Article {
 	int id;
 	String title;
 	String body;
-<<<<<<< HEAD
 	Date date;
 	int hit;
 	public Article(int id, String title, String body, Date date) {
@@ -157,12 +123,5 @@ class Article {
 		this.body = body;
 		this.date = date;
 		this.hit = hit;
-=======
-	
-	public Article(int id, String title, String body) {
-		this.id = id;
-		this.title = title;
-		this.body = body;
->>>>>>> 8532f8003e22e92d644cbe757300b66b7101d9fb
 	}
 }
