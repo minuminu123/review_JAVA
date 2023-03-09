@@ -1,6 +1,5 @@
 package com.KoreaIT.java.AM;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Scanner;
@@ -10,7 +9,7 @@ public class Main {
 	static ArrayList<Article> articles = new ArrayList<>();
 	public static void testData() {
 		
-		Date today = new Date();
+		String today = Util.getNowDateTimeStr();
 		articles.add(new Article(1, "test1", "test1", today, 0));
 
 	}
@@ -18,9 +17,7 @@ public class Main {
 		System.out.println("==프로그램 시작==");
 		testData();
 		Scanner sc = new Scanner(System.in);
-		SimpleDateFormat format;
 		
-		format = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
 		int lastArticleId = 0;
 		int hit = 0;
 		/* a는 자른 문자열에서의 번호 */
@@ -55,14 +52,14 @@ public class Main {
 				String title = sc.nextLine();
 				System.out.print("내용 : ");
 				String body = sc.nextLine();
-				Date date = new Date();
+				String regDate = Util.getNowDateTimeStr();
 
 //				System.out.println(title + " / " + body);
 
 				System.out.printf("%d번글이 생성되었습니다\n", id);
 				lastArticleId++;
 
-				articles.add(new Article(id, title, body, date, hit));
+				articles.add(new Article(id, title, body, regDate, hit));
 
 			} else if (command.startsWith("article detail")) {
 
@@ -71,7 +68,7 @@ public class Main {
 					a = Integer.parseInt(n[2]);
 					Article article = articles.get(a - 1);
 					System.out.println("번호: " + article.id);
-					System.out.println("날짜: " + format.format(article.date));
+					System.out.println("날짜: " + article.regDate);
 					System.out.println("제목: " + article.title);
 					System.out.println("내용: " + article.body);
 					article.hit++;
@@ -129,7 +126,7 @@ public class Main {
 					Date date = new Date();
 					article.body = body;
 					article.title = title;
-					article.date = date;
+					article.regDate = Util.getNowDateTimeStr();
 					System.out.printf("%d번글이 수정되었습니다\n", a);
 					
 				} catch (ArrayIndexOutOfBoundsException e) {
@@ -161,21 +158,21 @@ class Article {
 	int id;
 	String title;
 	String body;
-	Date date;
+	String regDate;
 	int hit;
 
-	public Article(int id, String title, String body, Date date) {
+	public Article(int id, String title, String body, String regDate) {
 		this.id = id;
 		this.title = title;
 		this.body = body;
-		this.date = date;
+		this.regDate = regDate;
 	}
 
-	public Article(int id, String title, String body, Date date, int hit) {
+	public Article(int id, String title, String body, String regDate, int hit) {
 		this.id = id;
 		this.title = title;
 		this.body = body;
-		this.date = date;
+		this.regDate = regDate;
 		this.hit = hit;
 	}
 }
