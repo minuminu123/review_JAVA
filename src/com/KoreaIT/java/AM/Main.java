@@ -6,18 +6,26 @@ import java.util.Date;
 import java.util.Scanner;
 
 public class Main {
+	static int num = 1;
+	static ArrayList<Article> articles = new ArrayList<>();
+	public static void testData() {
+		
+		Date today = new Date();
+		articles.add(new Article(1, "test1", "test1", today, 0));
+
+	}
 	public static void main(String[] args) {
 		System.out.println("==프로그램 시작==");
-
+		testData();
 		Scanner sc = new Scanner(System.in);
-		Date today = new Date();
 		SimpleDateFormat format;
+		
 		format = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
 		int lastArticleId = 0;
 		int hit = 0;
 		/* a는 자른 문자열에서의 번호 */
 		int a = 0;
-		ArrayList<Article> articles = new ArrayList<>();
+		
 		while (true) {
 			System.out.print("명령어 > ");
 			String command = sc.nextLine().trim();
@@ -42,7 +50,7 @@ public class Main {
 					System.out.printf("%d	/	%s\n", article.id, article.title);
 				}
 			} else if (command.equals("article write")) {
-				int id = lastArticleId + 1;
+				int id = lastArticleId + 1 + num;
 				System.out.print("제목 : ");
 				String title = sc.nextLine();
 				System.out.print("내용 : ");
@@ -68,7 +76,7 @@ public class Main {
 					System.out.println("내용: " + article.body);
 					article.hit++;
 					System.out.println("조회수: " + article.hit);
-			/* 다중 예외 처리를 하려면 상위 예외 클래스가 하위 예외 클래스보다 아래에 위치해야 한다.*/
+					/* 다중 예외 처리를 하려면 상위 예외 클래스가 하위 예외 클래스보다 아래에 위치해야 한다. */
 				} catch (ArrayIndexOutOfBoundsException e) {
 					System.out.println("명령어를 다시 입력해주세요.");
 				} catch (IndexOutOfBoundsException e) {
@@ -78,11 +86,19 @@ public class Main {
 				}
 
 			} else if (command.startsWith("article delete")) {
-				
+
 				try {
 					String[] n = command.split(" ");
 					a = Integer.parseInt(n[2]);
-					articles.remove(a - 1);
+					int foundIndex = -1;
+					for(int i = 0; i < articles.size(); i++) {
+						Article article = articles.get(i);
+						if(article.id == a) {
+							foundIndex = i;
+							break;
+						}
+					}
+					articles.remove(foundIndex);
 					System.out.println(a + "번 게시물이 삭제 되었습니다.");
 
 				} catch (ArrayIndexOutOfBoundsException e) {
@@ -91,6 +107,40 @@ public class Main {
 					System.out.println(a + "번 게시물은 존재하지 않습니다.");
 				} catch (NumberFormatException e) {
 					System.out.println("detail의 뒤에는 숫자만 올수 있습니다.");
+				}
+			} else if (command.startsWith("article modify")) {
+
+				try {
+					String[] n = command.split(" ");
+					a = Integer.parseInt(n[2]);
+					int foundIndex = -1;
+					for(int i = 0; i < articles.size(); i++) {
+						Article article = articles.get(i);
+						if(article.id == a) {
+							foundIndex = i;
+							break;
+						}
+					}
+					Article article = articles.get(foundIndex);
+					System.out.print("제목 : ");
+					String title = sc.nextLine();
+					System.out.print("내용 : ");
+					String body = sc.nextLine();
+					Date date = new Date();
+					article.body = body;
+					article.title = title;
+					article.date = date;
+					System.out.printf("%d번글이 수정되었습니다\n", a);
+					
+				} catch (ArrayIndexOutOfBoundsException e) {
+					System.out.println("명령어를 다시 입력해주세요.");
+					continue;
+				} catch (IndexOutOfBoundsException e) {
+					System.out.println(a + "번 게시물은 존재하지 않습니다.");
+					continue;
+				} catch (NumberFormatException e) {
+					System.out.println("detail의 뒤에는 숫자만 올수 있습니다.");
+					continue;
 				}
 			}
 
@@ -103,6 +153,8 @@ public class Main {
 
 		sc.close();
 	}
+
+	
 }
 
 class Article {
@@ -111,12 +163,14 @@ class Article {
 	String body;
 	Date date;
 	int hit;
+
 	public Article(int id, String title, String body, Date date) {
 		this.id = id;
 		this.title = title;
 		this.body = body;
 		this.date = date;
 	}
+
 	public Article(int id, String title, String body, Date date, int hit) {
 		this.id = id;
 		this.title = title;
