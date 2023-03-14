@@ -13,8 +13,10 @@ public class ArticleController extends Controller {
 	private String command;
 	private String actionMethodName;
 
-	public ArticleController(List<Article> articles, Scanner sc) {
-		this.articles = articles;
+	int lastArticleId = 3;
+
+	public ArticleController(Scanner sc) {
+		this.articles = new ArrayList<>();
 		this.sc = sc;
 	}
 
@@ -38,12 +40,13 @@ public class ArticleController extends Controller {
 		case "delete":
 			doDelete();
 			break;
+		default:
+			System.out.println("해당 기능은 사용할 수 없습니다");
+			break;
 		}
 	}
 
-	int lastArticleId = 3;
-
-	public void doWrite() {
+	private void doWrite() {
 		int id = lastArticleId + 1;
 		System.out.print("제목 : ");
 		String regDate = Util.getNowDateTimeStr();
@@ -51,14 +54,14 @@ public class ArticleController extends Controller {
 		System.out.print("내용 : ");
 		String body = sc.nextLine();
 
-		Article article = new Article(id, regDate, regDate, title, body);
+		Article article = new Article(id, regDate, regDate, loginedMember.id, title, body);
 		articles.add(article);
 
 		System.out.printf("%d번글이 생성되었습니다\n", id);
 		lastArticleId++;
 	}
 
-	public void showList() {
+	private void showList() {
 		if (articles.size() == 0) {
 			System.out.println("게시글이 없습니다");
 			return;
@@ -83,15 +86,16 @@ public class ArticleController extends Controller {
 			}
 		}
 
-		System.out.println(" 번호  //  제목    //  조회  ");
+		System.out.println(" 번호  //  제목    //  조회      //  작성자");
 		for (int i = forPrintArticles.size() - 1; i >= 0; i--) {
 			Article article = forPrintArticles.get(i);
-			System.out.printf("  %d   //   %s   //   %d  \n", article.id, article.title, article.hit);
+			System.out.printf("  %d   //   %s   //   %d     //   %d\n", article.id, article.title, article.hit,
+					article.memberId);
 		}
 
 	}
 
-	public void showDetail() {
+	private void showDetail() {
 		String[] cmdDiv = command.split(" ");
 
 		if (cmdDiv.length < 3) {
@@ -113,12 +117,13 @@ public class ArticleController extends Controller {
 		System.out.println("번호 : " + foundArticle.id);
 		System.out.println("작성날짜 : " + foundArticle.regDate);
 		System.out.println("수정날짜 : " + foundArticle.updateDate);
+		System.out.println("작성자 : " + foundArticle.memberId);
 		System.out.println("제목 : " + foundArticle.title);
 		System.out.println("내용 : " + foundArticle.body);
 		System.out.println("조회 : " + foundArticle.hit);
 	}
 
-	public void doModify() {
+	private void doModify() {
 		String[] cmdDiv = command.split(" ");
 
 		if (cmdDiv.length < 3) {
@@ -134,6 +139,12 @@ public class ArticleController extends Controller {
 			System.out.printf("%d번 게시물은 존재하지 않습니다\n", id);
 			return;
 		}
+
+		if (foundArticle.memberId != loginedMember.id) {
+			System.out.println("권한이 없습니다");
+			return;
+		}
+
 		System.out.print("새 제목 : ");
 		String updateDate = Util.getNowDateTimeStr();
 		String newTitle = sc.nextLine();
@@ -147,7 +158,7 @@ public class ArticleController extends Controller {
 		System.out.println(id + "번 글을 수정했습니다");
 	}
 
-	public void doDelete() {
+	private void doDelete() {
 		String[] cmdDiv = command.split(" ");
 
 		if (cmdDiv.length < 3) {
@@ -157,14 +168,19 @@ public class ArticleController extends Controller {
 
 		int id = Integer.parseInt(cmdDiv[2]);
 
-		int foundIndex = getArticleIndexById(id);
+		Article foundArticle = getArticleById(id);
 
-		if (foundIndex == -1) {
+		if (foundArticle == null) {
 			System.out.printf("%d번 게시물은 존재하지 않습니다\n", id);
 			return;
 		}
 
-		articles.remove(foundIndex);
+		if (foundArticle.memberId != loginedMember.id) {
+			System.out.println("권한이 없습니다");
+			return;
+		}
+
+		articles.remove(foundArticle);
 		System.out.println(id + "번 글을 삭제했습니다");
 
 	}
@@ -191,10 +207,10 @@ public class ArticleController extends Controller {
 	}
 
 	public void makeTestData() {
-		System.out.println("테스트를 위한 데이터를 생성합니다");
-		articles.add(new Article(1, Util.getNowDateTimeStr(), Util.getNowDateTimeStr(), "제목1", "제목1", 11));
-		articles.add(new Article(2, Util.getNowDateTimeStr(), Util.getNowDateTimeStr(), "제목2", "제목2", 22));
-		articles.add(new Article(3, Util.getNowDateTimeStr(), Util.getNowDateTimeStr(), "제목3", "제목3", 33));
+		System.out.println("테스트를 위한 게시글 데이터를 생성합니다");
+		articles.add(new Article(1, Util.getNowDateTimeStr(), Util.getNowDateTimeStr(), 3, "제목1", "제목1", 11));
+		articles.add(new Article(2, Util.getNowDateTimeStr(), Util.getNowDateTimeStr(), 2, "제목2", "제목2", 22));
+		articles.add(new Article(3, Util.getNowDateTimeStr(), Util.getNowDateTimeStr(), 2, "제목3", "제목3", 33));
 	}
 
 }
