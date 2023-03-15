@@ -103,6 +103,11 @@ public class MemberController extends Controller {
 			System.out.print("로그인 아이디 : ");
 			loginId = sc.nextLine();
 
+			if(loginId.length() == 0) {
+				System.out.println("아이디는 필수 입력 항목입니다.");
+				continue;
+			}
+			
 			if (isJoinableLoginId(loginId) == false) {
 				System.out.println("이미 사용중인 아이디입니다");
 				continue;
@@ -116,18 +121,33 @@ public class MemberController extends Controller {
 		while (true) {
 			System.out.print("로그인 비밀번호 : ");
 			loginPw = sc.nextLine();
+			if(loginPw.length() == 0) {
+				System.out.println("비밀번호는 필수 입력 항목입니다.");
+				continue;
+			}
 			System.out.print("로그인 비밀번호 확인: ");
 			loginPwConfirm = sc.nextLine();
-
+			if(loginPwConfirm.length() == 0) {
+				System.out.println("비밀번호는확인 필수 입력 항목입니다.");
+				continue;
+			}
 			if (loginPw.equals(loginPwConfirm) == false) {
 				System.out.println("비밀번호를 확인해주세요");
 				continue;
 			}
 			break;
 		}
-
-		System.out.print("이름 : ");
-		String name = sc.nextLine();
+		String name = null;
+		while(true) {
+			System.out.print("이름 : ");
+			name = sc.nextLine();
+			if(name.length() == 0) {
+				System.out.println("이름은 필수 입력 항목입니다.");
+				continue;
+			}
+			break;
+		}
+		
 
 		Member member = new Member(id, regDate, regDate, loginId, loginPw, name);
 		Container.memberDao.add(member);

@@ -23,6 +23,6 @@ public class MemberDao extends Dao {
 
 	public int setNewId() {
 
-		return 0;
+		return lastId + 1;
 	}
 }
