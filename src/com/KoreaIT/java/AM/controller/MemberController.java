@@ -56,20 +56,37 @@ public class MemberController extends Controller {
 	}
 
 	private void doLogin() {
-		System.out.print("로그인 아이디 : ");
-		String loginId = sc.nextLine();
-		System.out.print("로그인 비밀번호 : ");
-		String loginPw = sc.nextLine();
-
+		String loginId = null;
+		String loginPw = null;
+		while(true) {
+			System.out.print("로그인 아이디 : ");
+			loginId = sc.nextLine();
+			if(loginId.length() == 0) {
+				System.out.println("아이디는 필수 입력 항목입니다.");
+				continue;
+			}
+			break;
+		}
+		
+		while(true) {
+			System.out.print("로그인 비밀번호 : ");
+			loginPw = sc.nextLine();
+			if(loginPw.length() == 0) {
+				System.out.println("비밀번호는 필수 입력 항목입니다.");
+				continue;
+			}
+			break;
+		}
+		
 		Member member = getMemberByLoginId(loginId);
 
 		if (member == null) {
 			System.out.println("일치하는 회원이 없습니다");
 			return;
 		}
-
-		if (member.loginPw.equals(loginPw) == false) {
-			System.out.println("비밀번호가 일치하지 않습니다");
+		
+		if (member.loginPw.equals(loginPw) == false || member.loginId.equals(loginId) == false) {
+			System.out.println("아이디 또는 비밀번호가 일치하지 않습니다");
 			return;
 		}
 
