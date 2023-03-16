@@ -78,7 +78,7 @@ public class ArticleController extends Controller {
 		for (int i = forPrintArticles.size() - 1; i >= 0; i--) {
 			String writerName = null;
 
-			List<Member> members = memberService.getMebers();
+			List<Member> members = memberService.getMembers();
 			Article article = forPrintArticles.get(i);
 
 			for (Member member : members) {
@@ -113,7 +113,7 @@ public class ArticleController extends Controller {
 
 		String writerName = null;
 
-		List<Member> members = memberService.getMebers();
+		List<Member> members = memberService.getMembers();
 
 		for (Member member : members) {
 			if (foundArticle.memberId == member.id) {
